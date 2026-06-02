@@ -422,7 +422,109 @@
     .facilitator-img-wrap img { aspect-ratio: 4/3; object-position: center 20%; }
     .venue-strip { height: 260px; }
   }
+
+  /* ── Payment Modal ── */
+  .payment-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(10,8,6,0.92);
+    z-index: 10000;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    backdrop-filter: blur(4px);
+  }
+  .payment-overlay.active { display: flex; }
+  .payment-modal {
+    background: var(--warm-dark);
+    border: 1px solid rgba(201,169,110,0.3);
+    max-width: 480px;
+    width: 100%;
+    padding: 3rem 2.5rem;
+    position: relative;
+    max-height: 92vh;
+    overflow-y: auto;
+  }
+  .payment-modal-close {
+    position: absolute;
+    top: 1.25rem;
+    right: 1.5rem;
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-size: 1.8rem;
+    cursor: pointer;
+    line-height: 1;
+    transition: color 0.3s;
+  }
+  .payment-modal-close:hover { color: var(--gold); }
+  .payment-modal-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    color: var(--beige);
+  }
+  .payment-modal-title em { font-style: italic; color: var(--gold-light); }
+  .payment-modal-price {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 3.2rem;
+    font-weight: 300;
+    color: var(--gold);
+    line-height: 1;
+    margin: 1rem 0 0.25rem;
+  }
+  .payment-modal-price span {
+    font-family: 'Jost', sans-serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    display: block;
+    margin-top: 0.3rem;
+  }
+  .payment-modal-desc {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    letter-spacing: 0.1em;
+    margin-bottom: 2rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid rgba(201,169,110,0.15);
+  }
+  #paypal-button-container { min-height: 48px; }
+  .payment-success-msg {
+    text-align: center;
+    padding: 2rem 0;
+    display: none;
+  }
+  .payment-success-msg .icon { font-size: 1.6rem; color: var(--gold); margin-bottom: 1rem; }
+  .payment-success-msg h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.75rem;
+    font-weight: 300;
+    color: var(--beige);
+    margin-bottom: 0.75rem;
+  }
+  .payment-success-msg p { font-size: 0.85rem; color: var(--text-muted); line-height: 1.8; }
+  .payment-error-msg {
+    display: none;
+    text-align: center;
+    margin-top: 1rem;
+    font-size: 0.82rem;
+    color: #c0875a;
+    line-height: 1.8;
+  }
+  .payment-note {
+    text-align: center;
+    font-size: 0.68rem;
+    color: rgba(138,115,85,0.45);
+    letter-spacing: 0.1em;
+    margin-top: 1.5rem;
+  }
 </style>
+<!-- PayPal SDK — replace YOUR_PAYPAL_CLIENT_ID with your Business client ID from developer.paypal.com -->
+<script src="https://www.paypal.com/sdk/js?client-id=YOUR_PAYPAL_CLIENT_ID&currency=PHP&enable-funding=card&intent=capture" data-namespace="paypal"></script>
 </head>
 <body>
 
@@ -620,7 +722,7 @@
     <p style="font-size:0.85rem; color:var(--text-muted); line-height:1.9; margin-bottom:3rem;">
       This experience is for the woman who knows rest is not laziness — it is devotion. Who values her energy enough to invest in restoring it. Who is ready to feel the difference between surviving and being truly, deeply well.
     </p>
-    <a href="#" class="btn-gold"><span>Reserve My Spot Now</span></a>
+    <a href="#" onclick="openPaymentModal(); return false;" class="btn-gold"><span>Reserve My Spot Now</span></a>
   </div>
 </section>
 
@@ -633,8 +735,8 @@
     <p style="font-size:0.9rem; line-height:2; color:var(--text-muted); margin-bottom:3rem;">
       If you have been running on empty. If you crave something that actually works. If you believe you deserve more than a rushed self-care routine — this session was made for you.<br><br>5 seats. One date. No waitlist.
     </p>
-    <a href="#" class="btn-gold"><span>I'm Ready — Reserve My Seat</span></a>
-    <p style="margin-top:1.5rem; font-size:0.72rem; letter-spacing:0.15em; color:rgba(138,115,85,0.5);">DM to confirm · Payment secures your seat</p>
+    <a href="#" onclick="openPaymentModal(); return false;" class="btn-gold"><span>I'm Ready — Reserve My Seat</span></a>
+    <p style="margin-top:1.5rem; font-size:0.72rem; letter-spacing:0.15em; color:rgba(138,115,85,0.5);">Secure checkout · PayPal &amp; credit card accepted</p>
   </div>
 </section>
 
@@ -650,6 +752,83 @@
     });
   }, { threshold: 0.1 });
   reveals.forEach(r => observer.observe(r));
+</script>
+
+<!-- PAYMENT MODAL -->
+<div class="payment-overlay" id="paymentModal" role="dialog" aria-modal="true" aria-label="Secure Payment">
+  <div class="payment-modal">
+    <button class="payment-modal-close" onclick="closePaymentModal()" aria-label="Close">&times;</button>
+    <p class="section-label">Secure Checkout</p>
+    <h2 class="payment-modal-title">The <em>Resonance</em> Experience</h2>
+    <p class="payment-modal-price">&#8369;3,000 <span>Per Person · All Inclusive</span></p>
+    <p class="payment-modal-desc">Sound Bath &nbsp;·&nbsp; Body Energy Work &nbsp;·&nbsp; Aromatherapy</p>
+
+    <div id="paypal-button-container"></div>
+    <div class="payment-error-msg" id="payment-error">Something went wrong. Please try again or message us directly.</div>
+
+    <div class="payment-success-msg" id="payment-success">
+      <div class="icon">✦</div>
+      <h3>Your seat is reserved.</h3>
+      <p>Payment received. Check your email for confirmation.<br>We look forward to holding space for you.</p>
+    </div>
+
+    <p class="payment-note">Secured by PayPal &nbsp;·&nbsp; Credit &amp; debit cards accepted &nbsp;·&nbsp; No PayPal account required</p>
+  </div>
+</div>
+
+<script>
+  // Modal controls
+  function openPaymentModal() {
+    document.getElementById('paymentModal').classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+  function closePaymentModal() {
+    document.getElementById('paymentModal').classList.remove('active');
+    document.body.style.overflow = '';
+  }
+  document.getElementById('paymentModal').addEventListener('click', function(e) {
+    if (e.target === this) closePaymentModal();
+  });
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closePaymentModal();
+  });
+
+  // PayPal Smart Buttons (PayPal + Credit/Debit Card)
+  if (typeof paypal !== 'undefined') {
+    paypal.Buttons({
+      style: {
+        layout: 'vertical',
+        color: 'gold',
+        shape: 'rect',
+        label: 'pay',
+        tagline: false
+      },
+      createOrder: function(data, actions) {
+        return actions.order.create({
+          purchase_units: [{
+            description: 'The Resonance Experience — Sound Bath, Body Energy Work & Aromatherapy',
+            amount: {
+              currency_code: 'PHP',
+              value: '3000.00'
+            }
+          }]
+        });
+      },
+      onApprove: function(data, actions) {
+        return actions.order.capture().then(function() {
+          document.getElementById('paypal-button-container').style.display = 'none';
+          document.getElementById('payment-error').style.display = 'none';
+          document.getElementById('payment-success').style.display = 'block';
+        });
+      },
+      onError: function() {
+        document.getElementById('payment-error').style.display = 'block';
+      }
+    }).render('#paypal-button-container');
+  } else {
+    document.getElementById('paypal-button-container').innerHTML =
+      '<p style="text-align:center;font-size:0.85rem;color:var(--text-muted);padding:1rem 0;">Payment could not load. Please refresh or contact us directly.</p>';
+  }
 </script>
 </body>
 </html>
