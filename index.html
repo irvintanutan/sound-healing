@@ -895,24 +895,25 @@
       <div id="paypal-button-container"></div>
       <div class="payment-error-msg" id="payment-error">
         PayPal could not load right now.<br>
-        <button onclick="switchPayTab('gcash', document.querySelectorAll('.pay-tab')[1])" style="margin-top:0.9rem;background:none;border:1px solid rgba(201,169,110,0.4);color:var(--gold-light);font-family:'Jost',sans-serif;font-size:0.72rem;letter-spacing:0.2em;text-transform:uppercase;padding:0.6rem 1.4rem;cursor:pointer;">Pay via GCash instead</button>
+        <button onclick="switchPayTab('gcash', document.querySelectorAll('.pay-tab')[1])" style="margin-top:0.9rem;background:none;border:1px solid rgba(201,169,110,0.4);color:var(--gold-light);font-family:'Jost',sans-serif;font-size:0.72rem;letter-spacing:0.2em;text-transform:uppercase;padding:0.6rem 1.4rem;cursor:pointer;">Pay via InstaPay / QR instead</button>
       </div>
     </div>
 
-    <!-- GCash Panel -->
+    <!-- InstaPay QR Panel -->
     <div class="pay-panel" id="panel-gcash">
       <div class="gcash-panel">
-        <div class="gcash-badge">&#9679; GCash QR Payment</div>
+        <div class="gcash-badge">&#9679; InstaPay &nbsp;&middot;&nbsp; QR Ph</div>
         <div class="gcash-qr-wrap">
-          <img src="image.png" alt="GCash QR Code" />
+          <img src="image.png" alt="InstaPay QR Code" />
         </div>
         <ol class="gcash-steps">
-          <li>Open your <strong style="color:var(--beige)">GCash</strong> app and tap <em>Scan QR</em></li>
-          <li>Scan the code above &mdash; amount will pre-fill as <strong style="color:var(--gold)">₱3,000</strong></li>
-          <li>Complete the payment and take a screenshot</li>
-          <li>Send your screenshot to us to confirm your seat</li>
+          <li>Open your banking or e-wallet app &mdash; <strong style="color:var(--beige)">GCash, Maya, BPI, BDO, UnionBank,</strong> or any InstaPay-enabled app</li>
+          <li>Go to <em>Send / Pay</em> and choose <em>Scan QR</em></li>
+          <li>Scan the code above and enter <strong style="color:var(--gold)">₱3,000</strong> as the amount</li>
+          <li>Complete the transfer and take a screenshot of the confirmation</li>
+          <li>Send your screenshot to us &mdash; your seat is held upon receipt</li>
         </ol>
-        <p class="gcash-confirm-note">Your seat is reserved once we confirm receipt of payment.<br>We typically confirm within a few hours.</p>
+        <p class="gcash-confirm-note">Compatible with all InstaPay &amp; QR Ph member banks and e-wallets.<br>We confirm your reservation within a few hours.</p>
       </div>
     </div>
 
@@ -923,7 +924,7 @@
     </div>
 
     <p class="payment-note" id="paypal-note">Secured by PayPal &nbsp;·&nbsp; Credit &amp; debit cards accepted &nbsp;·&nbsp; No PayPal account required</p>
-    <p class="payment-note" id="gcash-note" style="display:none">GCash &nbsp;·&nbsp; Philippines only &nbsp;·&nbsp; Confirmation sent within hours</p>
+    <p class="payment-note" id="gcash-note" style="display:none">InstaPay &nbsp;·&nbsp; QR Ph &nbsp;·&nbsp; GCash · Maya · BPI · BDO &amp; more &nbsp;·&nbsp; PH banks &amp; e-wallets</p>
   </div>
 </div>
 
