@@ -887,13 +887,16 @@
     <!-- Tab Switcher -->
     <div class="pay-tabs" role="tablist">
       <button class="pay-tab active" role="tab" aria-selected="true" onclick="switchPayTab('paypal', this)">PayPal &amp; Card</button>
-      <button class="pay-tab" role="tab" aria-selected="false" onclick="switchPayTab('gcash', this)">GCash</button>
+      <button class="pay-tab" role="tab" aria-selected="false" onclick="switchPayTab('gcash', this)">InstaPay</button>
     </div>
 
     <!-- PayPal / Card Panel -->
     <div class="pay-panel active" id="panel-paypal">
       <div id="paypal-button-container"></div>
-      <div class="payment-error-msg" id="payment-error">Something went wrong. Please try again or message us directly.</div>
+      <div class="payment-error-msg" id="payment-error">
+        PayPal could not load right now.<br>
+        <button onclick="switchPayTab('gcash', document.querySelectorAll('.pay-tab')[1])" style="margin-top:0.9rem;background:none;border:1px solid rgba(201,169,110,0.4);color:var(--gold-light);font-family:'Jost',sans-serif;font-size:0.72rem;letter-spacing:0.2em;text-transform:uppercase;padding:0.6rem 1.4rem;cursor:pointer;">Pay via GCash instead</button>
+      </div>
     </div>
 
     <!-- GCash Panel -->
@@ -986,10 +989,11 @@
       onError: function() {
         document.getElementById('payment-error').style.display = 'block';
       }
-    }).render('#paypal-button-container');
+    }).render('#paypal-button-container').catch(function() {
+      document.getElementById('payment-error').style.display = 'block';
+    });
   } else {
-    document.getElementById('paypal-button-container').innerHTML =
-      '<p style="text-align:center;font-size:0.85rem;color:var(--text-muted);padding:1rem 0;">Payment could not load. Please refresh or contact us directly.</p>';
+    document.getElementById('payment-error').style.display = 'block';
   }
 </script>
 </body>
