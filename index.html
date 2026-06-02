@@ -886,21 +886,12 @@
 
     <!-- Tab Switcher -->
     <div class="pay-tabs" role="tablist">
-      <button class="pay-tab active" role="tab" aria-selected="true" onclick="switchPayTab('paypal', this)">PayPal &amp; Card</button>
-      <button class="pay-tab" role="tab" aria-selected="false" onclick="switchPayTab('gcash', this)">InstaPay</button>
-    </div>
-
-    <!-- PayPal / Card Panel -->
-    <div class="pay-panel active" id="panel-paypal">
-      <div id="paypal-button-container"></div>
-      <div class="payment-error-msg" id="payment-error">
-        PayPal could not load right now.<br>
-        <button onclick="switchPayTab('gcash', document.querySelectorAll('.pay-tab')[1])" style="margin-top:0.9rem;background:none;border:1px solid rgba(201,169,110,0.4);color:var(--gold-light);font-family:'Jost',sans-serif;font-size:0.72rem;letter-spacing:0.2em;text-transform:uppercase;padding:0.6rem 1.4rem;cursor:pointer;">Pay via InstaPay / QR instead</button>
-      </div>
+      <button class="pay-tab active" role="tab" aria-selected="true" onclick="switchPayTab('gcash', this)">GCash &amp; Bank</button>
+      <button class="pay-tab" role="tab" aria-selected="false" onclick="switchPayTab('paypal', this)">PayPal &amp; Card</button>
     </div>
 
     <!-- InstaPay QR Panel -->
-    <div class="pay-panel" id="panel-gcash">
+    <div class="pay-panel active" id="panel-gcash">
       <div class="gcash-panel">
         <div class="gcash-badge">&#9679; InstaPay &nbsp;&middot;&nbsp; QR Ph</div>
         <div class="gcash-qr-wrap">
@@ -917,14 +908,23 @@
       </div>
     </div>
 
+    <!-- PayPal / Card Panel -->
+    <div class="pay-panel" id="panel-paypal">
+      <div id="paypal-button-container"></div>
+      <div class="payment-error-msg" id="payment-error">
+        PayPal could not load right now.<br>
+        <button onclick="switchPayTab('gcash', document.querySelectorAll('.pay-tab')[0])" style="margin-top:0.9rem;background:none;border:1px solid rgba(201,169,110,0.4);color:var(--gold-light);font-family:'Jost',sans-serif;font-size:0.72rem;letter-spacing:0.2em;text-transform:uppercase;padding:0.6rem 1.4rem;cursor:pointer;">Pay via GCash &amp; Bank instead</button>
+      </div>
+    </div>
+
     <div class="payment-success-msg" id="payment-success">
       <div class="icon">✦</div>
       <h3>Your seat is reserved.</h3>
       <p>Payment received. Check your email for confirmation.<br>We look forward to holding space for you.</p>
     </div>
 
-    <p class="payment-note" id="paypal-note">Secured by PayPal &nbsp;·&nbsp; Credit &amp; debit cards accepted &nbsp;·&nbsp; No PayPal account required</p>
-    <p class="payment-note" id="gcash-note" style="display:none">InstaPay &nbsp;·&nbsp; QR Ph &nbsp;·&nbsp; GCash · Maya · BPI · BDO &amp; more &nbsp;·&nbsp; PH banks &amp; e-wallets</p>
+    <p class="payment-note" id="gcash-note">InstaPay &nbsp;·&nbsp; QR Ph &nbsp;·&nbsp; GCash · Maya · BPI · BDO &amp; more &nbsp;·&nbsp; PH banks &amp; e-wallets</p>
+    <p class="payment-note" id="paypal-note" style="display:none">Secured by PayPal &nbsp;·&nbsp; Credit &amp; debit cards accepted &nbsp;·&nbsp; No PayPal account required</p>
   </div>
 </div>
 
