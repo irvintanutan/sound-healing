@@ -492,6 +492,127 @@
     padding-bottom: 2rem;
     border-bottom: 1px solid rgba(201,169,110,0.15);
   }
+  /* Payment Tabs */
+  .pay-tabs {
+    display: flex;
+    border: 1px solid rgba(201,169,110,0.25);
+    margin-bottom: 2rem;
+    overflow: hidden;
+  }
+  .pay-tab {
+    flex: 1;
+    padding: 0.85rem 1rem;
+    background: none;
+    border: none;
+    font-family: 'Jost', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 300;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+  }
+  .pay-tab + .pay-tab { border-left: 1px solid rgba(201,169,110,0.25); }
+  .pay-tab.active {
+    background: rgba(201,169,110,0.08);
+    color: var(--gold-light);
+  }
+  .pay-tab.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 1px;
+    background: var(--gold);
+  }
+  .pay-tab:hover:not(.active) { color: var(--beige); background: rgba(201,169,110,0.04); }
+
+  .pay-panel { display: none; }
+  .pay-panel.active { display: block; }
+
+  /* GCash Panel */
+  .gcash-panel {
+    text-align: center;
+    padding: 0.5rem 0;
+  }
+  .gcash-qr-wrap {
+    display: inline-block;
+    position: relative;
+    padding: 1rem;
+    border: 1px solid rgba(201,169,110,0.25);
+    background: rgba(255,255,255,0.03);
+    margin: 0 auto 1.75rem;
+  }
+  .gcash-qr-wrap::before,
+  .gcash-qr-wrap::after {
+    content: '';
+    position: absolute;
+    width: 14px; height: 14px;
+    border-color: var(--gold);
+    border-style: solid;
+  }
+  .gcash-qr-wrap::before { top: -1px; left: -1px; border-width: 1px 0 0 1px; }
+  .gcash-qr-wrap::after  { bottom: -1px; right: -1px; border-width: 0 1px 1px 0; }
+  .gcash-qr-wrap img {
+    display: block;
+    width: 200px;
+    height: 200px;
+    object-fit: contain;
+  }
+  .gcash-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(0,123,255,0.08);
+    border: 1px solid rgba(0,123,255,0.2);
+    padding: 0.45rem 1.1rem;
+    margin-bottom: 1.5rem;
+    font-size: 0.68rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #7ab3f5;
+  }
+  .gcash-steps {
+    text-align: left;
+    counter-reset: gcash;
+    margin: 0 0 1.5rem;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid rgba(201,169,110,0.1);
+    padding-top: 1.5rem;
+  }
+  .gcash-steps li {
+    counter-increment: gcash;
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    line-height: 1.7;
+    margin-bottom: 0.85rem;
+  }
+  .gcash-steps li::before {
+    content: counter(gcash);
+    flex-shrink: 0;
+    width: 22px; height: 22px;
+    border: 1px solid rgba(201,169,110,0.35);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.65rem;
+    color: var(--gold);
+    margin-top: 0.1rem;
+  }
+  .gcash-confirm-note {
+    font-size: 0.72rem;
+    color: rgba(138,115,85,0.55);
+    letter-spacing: 0.08em;
+    line-height: 1.8;
+    margin-top: 1rem;
+  }
+
   #paypal-button-container { min-height: 48px; }
   .payment-success-msg {
     text-align: center;
@@ -763,8 +884,34 @@
     <p class="payment-modal-price">&#8369;3,000 <span>Per Person · All Inclusive</span></p>
     <p class="payment-modal-desc">Sound Bath &nbsp;·&nbsp; Body Energy Work &nbsp;·&nbsp; Aromatherapy</p>
 
-    <div id="paypal-button-container"></div>
-    <div class="payment-error-msg" id="payment-error">Something went wrong. Please try again or message us directly.</div>
+    <!-- Tab Switcher -->
+    <div class="pay-tabs" role="tablist">
+      <button class="pay-tab active" role="tab" aria-selected="true" onclick="switchPayTab('paypal', this)">PayPal &amp; Card</button>
+      <button class="pay-tab" role="tab" aria-selected="false" onclick="switchPayTab('gcash', this)">GCash</button>
+    </div>
+
+    <!-- PayPal / Card Panel -->
+    <div class="pay-panel active" id="panel-paypal">
+      <div id="paypal-button-container"></div>
+      <div class="payment-error-msg" id="payment-error">Something went wrong. Please try again or message us directly.</div>
+    </div>
+
+    <!-- GCash Panel -->
+    <div class="pay-panel" id="panel-gcash">
+      <div class="gcash-panel">
+        <div class="gcash-badge">&#9679; GCash QR Payment</div>
+        <div class="gcash-qr-wrap">
+          <img src="image.png" alt="GCash QR Code" />
+        </div>
+        <ol class="gcash-steps">
+          <li>Open your <strong style="color:var(--beige)">GCash</strong> app and tap <em>Scan QR</em></li>
+          <li>Scan the code above &mdash; amount will pre-fill as <strong style="color:var(--gold)">₱3,000</strong></li>
+          <li>Complete the payment and take a screenshot</li>
+          <li>Send your screenshot to us to confirm your seat</li>
+        </ol>
+        <p class="gcash-confirm-note">Your seat is reserved once we confirm receipt of payment.<br>We typically confirm within a few hours.</p>
+      </div>
+    </div>
 
     <div class="payment-success-msg" id="payment-success">
       <div class="icon">✦</div>
@@ -772,7 +919,8 @@
       <p>Payment received. Check your email for confirmation.<br>We look forward to holding space for you.</p>
     </div>
 
-    <p class="payment-note">Secured by PayPal &nbsp;·&nbsp; Credit &amp; debit cards accepted &nbsp;·&nbsp; No PayPal account required</p>
+    <p class="payment-note" id="paypal-note">Secured by PayPal &nbsp;·&nbsp; Credit &amp; debit cards accepted &nbsp;·&nbsp; No PayPal account required</p>
+    <p class="payment-note" id="gcash-note" style="display:none">GCash &nbsp;·&nbsp; Philippines only &nbsp;·&nbsp; Confirmation sent within hours</p>
   </div>
 </div>
 
@@ -792,6 +940,20 @@
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') closePaymentModal();
   });
+
+  // Tab switcher
+  function switchPayTab(tab, btn) {
+    document.querySelectorAll('.pay-tab').forEach(function(t) {
+      t.classList.remove('active');
+      t.setAttribute('aria-selected', 'false');
+    });
+    document.querySelectorAll('.pay-panel').forEach(function(p) { p.classList.remove('active'); });
+    btn.classList.add('active');
+    btn.setAttribute('aria-selected', 'true');
+    document.getElementById('panel-' + tab).classList.add('active');
+    document.getElementById('paypal-note').style.display = tab === 'paypal' ? '' : 'none';
+    document.getElementById('gcash-note').style.display  = tab === 'gcash'  ? '' : 'none';
+  }
 
   // PayPal Smart Buttons (PayPal + Credit/Debit Card)
   if (typeof paypal !== 'undefined') {
